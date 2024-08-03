@@ -1,4 +1,4 @@
-// 변수 선언
+// 변수 선언 -- 메인 
 const arrTom = [];
 const arrJerry = [];
 let num = 0;
