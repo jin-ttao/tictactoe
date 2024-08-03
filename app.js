@@ -1,3 +1,4 @@
+// 변수 선언
 const arrTom = [];
 const arrJerry = [];
 let num = 0;
