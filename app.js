@@ -1,6 +1,5 @@
-// 여기는 진태브랜치?
-// 변수 선언 
-// const arrTom = [];
+// 변수 선언
+const arrTom = [];
 const arrJerry = [];
 let num = 0;
 
