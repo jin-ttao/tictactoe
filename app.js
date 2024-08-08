@@ -15,7 +15,8 @@ const modal = document.querySelector(".modal");
 let result = document.querySelector(".modal_result");
 const restartBtn = document.querySelector(".restart_btn");
 
-button1.addEventListener("click", function() {  // 클릭하면 좌표값 가져오기
+// 클릭하면 좌표값 가져오기
+button1.addEventListener("click", function() {  
     action(button1.innerHTML);
     render(button1);
 }, { once: true });
@@ -51,7 +52,8 @@ button9.addEventListener("click", function() {
     action(button9.innerHTML);
     render(button9);
 }, { once: true });
-restartBtn.addEventListener("click", restart)   // 게임 다시 시작(새로고침)
+// 게임 다시 시작(새로고침)
+restartBtn.addEventListener("click", restart)   
 
 // 기능1. 클릭액션
 function action(k) {
