@@ -87,9 +87,6 @@ function render(k) {
 
 // 기능2. 승리 판별
 function winner(num) {
-    if (num === 9) {
-        end();
-    }
     // 톰 검사
     if (num % 2 === 0) {
         // 승리조건1. 가로세로3개로 이기는 경우
@@ -128,33 +125,51 @@ function winner(num) {
                 cntBackThree++;
             }
         }
-        console.log(cntFrontOne);
         if (cntFrontOne >= 3 || cntFrontTwo >= 3 || cntFrontThree >= 3 || cntBackOne >= 3 || cntBackTwo >= 3 || cntBackThree >= 3) {
-            end();
+            end("😾Tom");
         }    
         // 승리조건2. 대각선으로 이기는 경우
+        let cntSlashElement = {a:0, b:0};
         for (i = 0; i < arrTom.length; i++) {
             if (arrTom[i][0] === 2 && arrTom[i][1] === 2) {
                 for (i = 0; i < arrTom.length; i++) {
-                    // 2-1. 우하향 대각선
                     if (arrTom[i][0] === 1 && arrTom[i][1] === 1) {
-                        for (i = 0; i < arrTom.length; i++) {
-                            if (arrTom[i][0] === 3 && arrTom[i][1] === 3) {
-                                end();
-                            }
-                        }        
-                    // 2-2. 우상향 대각선
-                    } else if (arrTom[i][0] === 3 && arrTom[i][1] === 1) {
-                        for (i = 0; i < arrTom.length; i++) {
-                            if (arrTom[i][0] === 1 && arrTom[i][1] === 3) {
-                                end();
-                            }
-                        }        
+                        cntSlashElement.a++;
                     }
-                } 
-            } 
+                }
+                for (i = 0; i < arrTom.length; i++) {
+                    if (arrTom[i][0] === 3 && arrTom[i][1] === 3) {
+                        cntSlashElement.a++;
+                    }
+                }
+                if (cntSlashElement.a === 2) {
+                    end("😾Tom");
+                    break; 
+                }
+                cntSlashElement.a = 0;
+                
+                for (i = 0; i < arrTom.length; i++) {
+                    if (arrTom[i][0] === 3 && arrTom[i][1] === 1) {
+                        cntSlashElement.b++;
+                    }
+                }
+                
+                for (i = 0; i < arrTom.length; i++) {
+                    if (arrTom[i][0] === 1 && arrTom[i][1] === 3) {
+                        cntSlashElement.b++;
+                    }
+                }
+                if (cntSlashElement.b === 2) {
+                    end("😾Tom");
+                    break; 
+                }
+                cntSlashElement.b = 0;
+            }
         } 
-    }  else { // 제리 검사 (톰 코드와 동일)
+        if (num === 8 && cntSlashElement.a !== 0 && cntSlashElement.b !==0) {
+            end("무승부");
+        }
+    }  else { // 제리 검사 (무승부 로직 제외 톰 코드와 동일)
         // 승리조건1.
         let arrJerryFront = [];
         let arrJerryBack = [];
@@ -191,43 +206,55 @@ function winner(num) {
                 cntBackThree++;
             }
         }
-        console.log(cntFrontOne); 
         if (cntFrontOne >= 3 || cntFrontTwo >= 3 || cntFrontThree >= 3 || cntBackOne >= 3 || cntBackTwo >= 3 || cntBackThree >= 3) {
-            end();
+            end("🐭Jerry");
         }    
         // 승리조건2. 
-        for (i = 0; i < arrJerry.length; i++) {  
-            if (arrJerry[i][0] === 2 && arrJerry[i][1] === 2) { 
-                for (i = 0; i < arrJerry.length; i++) {
-                    // 2-1. 우하향 대각선
+        let cntSlashElement = {a:0, b:0};
+        for (i = 0; i < arrJerry.length; i++) {
+            if (arrJerry[i][0] === 2 && arrJerry[i][1] === 2) {
+                for (i = 0; i < arJerry.length; i++) {
                     if (arrJerry[i][0] === 1 && arrJerry[i][1] === 1) {
-                        for (i = 0; i < arrJerry.length; i++) {
-                            if (arrJerry[i][0] === 3 && arrJerry[i][1] === 3) {
-                                end();
-                            }
-                        }        
-                    // 2-2. 우상향 대각선
-                    } else if (arrJerry[i][0] === 3 && arrJerry[i][1] === 1) {
-                        for (i = 0; i < arrJerry.length; i++) {
-                            if (arrJerry[i][0] === 1 && arrJerry[i][1] === 3) {
-                                end();
-                            }
-                        }        
+                        cntSlashElement.a++;
                     }
-                } 
-            } 
+                }
+                for (i = 0; i < arrJerry.length; i++) {
+                    if (arrJerry[i][0] === 3 && arrJerry[i][1] === 3) {
+                        cntSlashElement.a++;
+                    }
+                }
+                if (cntSlashElement.a === 2) {
+                    end("🐭Jerry");
+                    break;
+                }
+                cntSlashElement.a = 0;
+                
+                for (i = 0; i < arrJerry.length; i++) {
+                    if (arrJerry[i][0] === 3 && arrJerry[i][1] === 1) {
+                        cntSlashElement.b++;
+                    }
+                }
+                for (i = 0; i < arrJerry.length; i++) {
+                    if (arrJerry[i][0] === 1 && arrJerry[i][1] === 3) {
+                        cntSlashElement.b++;
+                    }
+                }
+                if (cntSlashElement.b === 2) {
+                    end("🐭Jerry");
+                    break;
+                }
+                cntSlashElement.b = 0;
+            }
         }  
     }
 }
 
 // 기능3. 게임종료(모달 팝업)
-function end() {
-    if (num % 2 === 0 && num !== 8) {
-        result.textContent = 'Tom이 이겼어요!'
-    } else if (num % 2 !== 0) {
-        result.textContent = 'Jerry가 이겼어요!'
-    } else if (num === 8) {
-        result.textContent = '무승부에요!'
+function end(resultText) {
+    if (resultText === "무승부") {
+        result.textContent = "무승부에요!";
+    } else {
+        result.textContent = `${resultText} 승리!`;
     }
     modal.classList.add("show");
 }
