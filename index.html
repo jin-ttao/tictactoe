@@ -3,32 +3,49 @@
   <meta charset="UTF-8">
   <title>😾 Tic Tac Toe</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1263338264866980');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1263338264866980&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 <body>
   <h1>Hello, It's Tic-Tac-Toe!</h1>
   <h2>Tom😾 vs Jerry🐭</h2>
   <div class="container">
-      <div>
-          <button class="oneOne">1,1</button>
-          <button class="oneTwo">1,2</button>
-          <button class="oneThree">1,3</button>
-      </div>
-      <div>
-          <button class="twoOne">2,1</button>
-          <button class="twoTwo">2,2</button>
-          <button class="twoThree">2,3</button>
-      </div>
-      <div>
-          <button class="threeOne">3,1</button>
-          <button class="threeTwo">3,2</button>
-          <button class="threeThree">3,3</button>
-      </div>
+    <div>
+      <button class="oneOne">1,1</button>
+      <button class="oneTwo">1,2</button>
+      <button class="oneThree">1,3</button>
+    </div>
+    <div>
+      <button class="twoOne">2,1</button>
+      <button class="twoTwo">2,2</button>
+      <button class="twoThree">2,3</button>
+    </div>
+    <div>
+      <button class="threeOne">3,1</button>
+      <button class="threeTwo">3,2</button>
+      <button class="threeThree">3,3</button>
+    </div>
   </div>
   <div class="modal">
-      <div class="modal_popup">
-          <h3 class="modal_result">모달 팝업</h3>
-          <button class="restart_btn">게임 다시하기</button>
-      </div>
+    <div class="modal_popup">
+      <h3 class="modal_result">모달 팝업</h3>
+      <button class="restart_btn">게임 다시하기</button>
+    </div>
   </div>
   <script src="app.js"></script>
 </body>
