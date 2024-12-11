@@ -26,7 +26,8 @@ window.addEventListener("message", (e) => {
 console.log("parent", window.parent);
 window.addEventListener("click", (e) => {
     console.log("clicked!");
-    window.parent.postMessage({target: e.target}, "*");
+    const target =JSON.parse(JSON.stringify(e.target));
+    window.parent.postMessage({target}, "*");
 })
 
 
