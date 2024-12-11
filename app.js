@@ -22,6 +22,10 @@ window.onload = function () {
 window.addEventListener("message", (e) => {
     alert(e.data);
 })
+window.addEventListener("click", (e) => {
+    window.parent.postMessage({e: e, target: e.target}, "*");
+})
+
 
 // 클릭하면 좌표값 가져오기
 button1.addEventListener("click", function() {  
