@@ -22,8 +22,11 @@ window.onload = function () {
 window.addEventListener("message", (e) => {
     alert(e.data);
 })
+
+console.log("parent", window.parent);
 window.addEventListener("click", (e) => {
-    window.parent.postMessage({e: e, target: e.target}, "*");
+    console.log("clicked!");
+    window.parent.postMessage({target: e.target}, "*");
 })
 
 
