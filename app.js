@@ -20,13 +20,15 @@ window.onload = function () {
     window.parent.postMessage({hello: "parent"}, "*");
 }
 window.addEventListener("message", (e) => {
-    alert(e.data);
+    // alert(e.data);
 })
 
 console.log("parent", window.parent);
 window.addEventListener("click", (e) => {
     console.log("clicked!");
-    const target =JSON.parse(JSON.stringify(e.target));
+    console.log("e.target", e.target);
+    console.log("e.target_id", e.target.id);
+    const target =JSON.parse(JSON.stringify(e.target.id));
     window.parent.postMessage({target}, "*");
 })
 
