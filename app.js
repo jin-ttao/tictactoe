@@ -16,23 +16,6 @@ const modal = document.querySelector(".modal");
 let result = document.querySelector(".modal_result");
 const restartBtn = document.querySelector(".restart_btn");
 
-window.onload = function () {
-    window.parent.postMessage({hello: "parent"}, "*");
-}
-window.addEventListener("message", (e) => {
-    // alert(e.data);
-})
-
-console.log("parent", window.parent);
-window.addEventListener("click", (e) => {
-    console.log("clicked!");
-    console.log("e.target", e.target);
-    console.log("e.target_id", e.target.id);
-    const target =JSON.parse(JSON.stringify(e.target.id));
-    window.parent.postMessage({target}, "*");
-})
-
-
 // 클릭하면 좌표값 가져오기
 button1.addEventListener("click", function() {  
     action(button1.innerHTML);
