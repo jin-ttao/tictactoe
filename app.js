@@ -1,4 +1,4 @@
-// 변수 선언 -- 메인 
+// 변수 선언 -- 메인
 const arrTom = [];
 const arrJerry = [];
 let num = 0;
@@ -15,6 +15,13 @@ const button9 = document.querySelector(".threeThree");
 const modal = document.querySelector(".modal");
 let result = document.querySelector(".modal_result");
 const restartBtn = document.querySelector(".restart_btn");
+
+window.onload = function () {
+    window.parent.postMessage({hello: "parent"}, "*");
+}
+window.addEventListener("message", (e) => {
+    alert(e.data);
+})
 
 // 클릭하면 좌표값 가져오기
 button1.addEventListener("click", function() {  
