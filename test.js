@@ -127,8 +127,30 @@ window.onload = function () {
 
 window.addEventListener("message", (e) => {
   console.log("@child received message:", e.data);
-  loadScript(e.data);
-  // window.addEventListener("load", loadScript);
+  const overlay = document.querySelector("#welcomeToastOverlay");
+  if (!overlay) {
+    console.log("@new overlay!");
+    loadScript(e.data);
+  } else {
+    console.log("@modify overlay!");
+    const popoverHeader = document.querySelector("#welcomeToastPopoverHeader");
+    const popoverDescription = document.querySelector("#welcomeToastPopoverDescription");
+    const popoverFooter = document.querySelector("#welcomeToastPopoverFooter");
+
+    const {
+      name,
+      type,
+      target_element_id,
+      message_title,
+      message_body,
+      message_button_color_code,
+      background_opacity,
+    } = e.data;
+
+    popoverHeader.innerHTML = `<span>${message_title}</span>`;
+    popoverDescription.innerHTML = `<span>${message_body}</span>`;
+    popoverFooter.innerHTML = `<span>${message_body}</span>`;
+  }
 })
 
 console.log("window parent:", window.parent);
