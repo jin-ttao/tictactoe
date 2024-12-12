@@ -1,4 +1,5 @@
 function loadScript(data) {
+  console.log("@start setup");
   const {
     name,
     type,
@@ -8,9 +9,17 @@ function loadScript(data) {
     message_button_color_code,
     background_opacity,
   } = data;
+  const body = document.getElementsByTagName("body");
+  console.log("body", body);
   const WHITE_SPACE = 5;
   const { width: widthViewport, height: heightViewport } = window.visualViewport;
   const target = document.querySelector(`#${target_element_id}`);
+  console.log("target_element_id", target);
+  if (!target) {
+    console.log("no target_element_id");
+    return;
+  }
+
   const {
     width: widthTarget,
     height: heightTarget,
@@ -22,7 +31,7 @@ function loadScript(data) {
   const overlay = window.document.createElement("div");
   overlay.id = "welcomeToastOverlay";
   setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout);
-  app.insertAdjacentElement("afterend", overlay);
+  body.appendChild(overlay);
 
   const popover = window.document.createElement("div");
   popover.id = "welcomeToastPopover";
@@ -114,19 +123,19 @@ function loadScript(data) {
 }
 
 window.onload = function () {
-  console.log("child onload, send message to parent");
+  console.log("@child onload, send message to parent");
   window.parent.postMessage({connect: true}, "*");
 }
 
 window.addEventListener("message", (e) => {
-  console.log("child received message:", e.data);
+  console.log("@child received message:", e.data);
   loadScript(e.data);
   // window.addEventListener("load", loadScript);
 })
 
 console.log("window parent:", window.parent);
 window.addEventListener("click", (e) => {
-  console.log("clicked e.target: ", e.target, "e.target_id:", e.target.id);
+  console.log("@ clicked e.target: ", e.target, "e.target_id:", e.target.id);
   const target =JSON.parse(JSON.stringify(e.target.id));
   window.parent.postMessage({target}, "*");
 })
