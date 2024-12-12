@@ -78,7 +78,7 @@ function loadScript(data) {
         >
           <path
             d="M${widthViewport},0L0,0L0,${heigthViewport}L${widthViewport},${heigthViewport}L${widthViewport},0Z M${xTarget},${yTarget} h${widthTarget} a5,5 0 0 1 5,5 v${heightTarget} a5,5 0 0 1 -5,5 h-${widthTarget} a5,5 0 0 1 -5,-5 v-${heightTarget} a5,5 0 0 1 5,-5 z"
-            style="fill: rgb(0, 0, 0); opacity: ${background_opacity / 100}}; pointer-events: auto; cursor: auto;"
+            style="fill: rgb(0, 0, 0); opacity: ${background_opacity / 100}; pointer-events: auto; cursor: auto;"
           >
           </path>
         </svg>
