@@ -2,6 +2,7 @@ const WHITE_SPACE = 5;
 const { width: widthViewport, height: heightViewport } = window.visualViewport;
 let targetElement = null;
 let message = "";
+const overlay = document.getElementById("welcomeToastOverlay");
 
 function loadScript() {
   console.log("@toast setup start");
@@ -107,7 +108,6 @@ window.onload = function () {
 
 window.addEventListener("message", (e) => {
   message = e.data;
-  const overlay = document.getElementById("welcomeToastOverlay");
   if (!overlay) {
     loadScript();
   } else {
