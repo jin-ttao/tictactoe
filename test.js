@@ -1,5 +1,5 @@
 function loadScript(data) {
-  console.log("@start setup");
+  console.log("@toast setup start");
   const {
     name,
     type,
@@ -9,8 +9,6 @@ function loadScript(data) {
     message_button_color_code,
     background_opacity,
   } = data;
-  const body = document.getElementsByTagName("body");
-  console.log("body", body);
   const WHITE_SPACE = 5;
   const { width: widthViewport, height: heightViewport } = window.visualViewport;
   const target = document.querySelector(`#${target_element_id}`);
@@ -31,7 +29,7 @@ function loadScript(data) {
   const overlay = window.document.createElement("div");
   overlay.id = "welcomeToastOverlay";
   setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout);
-  body.appendChild(overlay);
+  document.body.appendChild(overlay);
 
   const popover = window.document.createElement("div");
   popover.id = "welcomeToastPopover";
