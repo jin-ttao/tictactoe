@@ -2,7 +2,7 @@ const WHITE_SPACE = 5;
 const { width: widthViewport, height: heightViewport } = window.visualViewport;
 let targetElement = null;
 let message = "";
-const overlay = document.getElementById("welcomeToastOverlay");
+let overlay = null;
 
 function loadScript() {
   console.log("@toast setup start");
@@ -27,7 +27,7 @@ function loadScript() {
   } = targetElement.getBoundingClientRect();
   const yTargetInLayout = Math.ceil(yTarget) - WHITE_SPACE;
 
-  const overlay = window.document.createElement("div");
+  overlay = window.document.createElement("div");
   overlay.id = "welcomeToastOverlay";
   setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout, background_opacity);
   document.body.appendChild(overlay);
