@@ -126,6 +126,7 @@ window.addEventListener("message", (e) => {
       x: xTarget,
       y: yTarget,
     } = targetElement.getBoundingClientRect();
+    const yTargetInLayout = Math.ceil(yTarget) - WHITE_SPACE;
 
     setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout, background_opacity);
     popoverHeader.innerHTML = `<span>${message_title}</span>`;
