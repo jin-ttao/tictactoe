@@ -3,6 +3,8 @@ const arrTom = [];
 const arrJerry = [];
 let num = 0;
 
+console.log("parent", window.parent);
+console.log("top", window.top);
 const button1 = document.querySelector("#oneOne");
 const button2 = document.querySelector("#oneTwo");
 const button3 = document.querySelector("#oneThree");
