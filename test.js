@@ -213,6 +213,10 @@ function createPopover() {
 
 function setPopover(targetElement, message_title, message_body) {
   const popover = document.querySelector("#welcomeToastPopover");
+  const popoverHeader = document.querySelector("#welcomeToastPopoverHeader");
+  const popoverDescription = document.querySelector("#welcomeToastPopoverDescription");
+  const popoverFooter = document.querySelector("#welcomeToastPopoverFooter");
+
   const { target: t } = getWindowAndTargetSizePosition(targetElement);
   const xTargetInLayout = t.xTarget + t.widthTarget + WHITE_SPACE;
 
