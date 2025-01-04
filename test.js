@@ -239,6 +239,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   const gapRight = w.widthViewport - (t.right + t.widthTarget);
   const xTargetInLayout = t.xTarget + t.widthTarget + WHITE_SPACE;
 
+  popoverImage.innerHTML = "";
   popoverHeader.innerHTML = `<span style="font-weight: bold;">${message_title}</span>`;
   popoverDescription.innerHTML = `<span>${message_body}</span>`;
   popoverFooter.innerHTML = `<div style="width: 60%"></div><button id="welcomeToastPopoverButton" type="button">확인</button>`;

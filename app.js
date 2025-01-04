@@ -17,7 +17,7 @@ let result = document.querySelector(".modal_result");
 const restartBtn = document.querySelector(".restart_btn");
 
 // 클릭하면 좌표값 가져오기
-button1.addEventListener("click", function() {  
+button1.addEventListener("click", function() {
     action(button1.innerHTML);
     render(button1);
 }, { once: true });
