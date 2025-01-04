@@ -228,6 +228,7 @@ function createPopover() {
 }
 
 function setPopover(targetElement, message_title, message_body, image_url) {
+  console.log("@", targetElement, "@", message_title, "@", message_body, "@", image_url);
   const popover = document.querySelector("#welcomeToastPopover");
   const popoverImage = document.querySelector("#welcomeToastPopoverImage");
   const popoverHeader = document.querySelector("#welcomeToastPopoverHeader");
@@ -242,7 +243,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   popoverDescription.innerHTML = `<span>${message_body}</span>`;
   popoverFooter.innerHTML = `<div style="width: 60%"></div><button id="welcomeToastPopoverButton" type="button">확인</button>`;
 
-  if (image_url) {
+  if (image_url !== "") {
     popoverImage.innerHTML = `<img src=${image_url} alt="popoverFooter" width="100%" />`;
   }
 
