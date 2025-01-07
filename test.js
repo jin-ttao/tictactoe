@@ -6,73 +6,72 @@ s.defer = true;
 s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 document.head.appendChild(s);
 
-const TARGET_ORIGIN = "http://localhost:5173";
+const TARGET_ORIGIN = "https://welcome-toast.com";
 const SUPABASE_URL = "https://mepmumyanfvgmvjfjpld.supabase.co";
 const SUPABASE_API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcG11bXlhbmZ2Z212amZqcGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM1Nzg2MDUsImV4cCI6MjA0OTE1NDYwNX0.HojnVr-YfuBy25jf9qy5DKYkqvdowZ0Pz2FScfIN-04";
 const WHITE_SPACE = 5;
+const FIRST_TOAST_INDEX = 0;
+let indexToast = FIRST_TOAST_INDEX;
+
+const totalToastList = [];
+let currentToastList = [];
+let prevFirstToast;
+let lastToast;
 let overlay = null;
 let targetElement = null;
-let toastList = [];
-let countToastClicked = 0;
 let messageFromPreview = "";
 let client;
 
-async function getProject() {
-  try {
-    const href = window.location.href;
-    client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
+const observer = new MutationObserver(mutationCallback);
+function mutationCallback() {
+  const currentToastIdList = getCurrentToastList().map((toast) => toast.id);
 
-    if (href && href !== "") {
-      const { data: resultProject, error } = await client
-        .from("project")
-        .select("*")
-        .eq("link", href);
-
-      if (resultProject.length === 0) {
-        throw new Error(error);
-      }
-
-      getToastList(resultProject[0].id);
-    }
-  } catch (e) {
-    console.log(
-      "등록되지 않은 URL입니다. @welcome-toast 관리자 페이지에서 프로젝트 설정을 확인해주세요.",
-    );
-    console.error(e);
+  if (lastToast.id === currentToastIdList[currentToastIdList.length - 1]) {
+    return;
   }
+
+  if (prevFirstToast.id !== currentToastList[FIRST_TOAST_INDEX].id) {
+    indexToast = FIRST_TOAST_INDEX;
+  }
+
+  if (currentToastIdList.length > 0) {
+    applyToast(indexToast);
+  }
+
   return;
 }
+const body = document.body;
+const config = {
+  childList: true,
+  subtree: true,
+  attributes: true,
+  attributeFilter: ["class", "style"],
+  characterData: true,
+};
 
-async function getToastList(projectId) {
-  try {
-    if (projectId) {
-      const INDEX_FIRST_TOAST = 0;
-      const { data: resultToastList, error } = await client
-        .from("toast")
-        .select("*")
-        .eq("project_id", projectId);
+function applyToast() {
+  getFirstToast();
 
-      if (resultToastList.length === 0) {
-        throw new Error(error);
-      }
+  const {
+    id: toastId,
+    target_element_id,
+    message_title,
+    message_body,
+    image_url,
+    background_opacity,
+  } = currentToastList[indexToast];
 
-      toastList = [...resultToastList];
-      applyToast(INDEX_FIRST_TOAST);
-    }
-  } catch (e) {
-    console.log(
-      "등록된 토스트가 없습니다. @welcome-toast 관리자 페이지에서 토스트 설정을 확인해주세요.",
-    );
-    console.error(e);
+  const isViewedToast = new Set(getToastHistory()).has(toastId);
+  if (isViewedToast) {
+    return;
   }
-  return;
-}
 
-function applyToast(indexToast) {
-  const { target_element_id, message_title, message_body, image_url, background_opacity } =
-    toastList[indexToast];
-  targetElement = document.querySelector(`#${target_element_id}`);
+  if (indexToast === FIRST_TOAST_INDEX) {
+    setToastHistory(currentToastList[FIRST_TOAST_INDEX].id);
+  }
+
+  targetElement = document.getElementById(`${target_element_id}`);
 
   if (!target_element_id || !targetElement) {
     console.log(
@@ -98,6 +97,10 @@ function applyToast(indexToast) {
   createPopover();
   setPopover(targetElement, message_title, message_body, image_url);
 
+  lastToast = currentToastList[indexToast];
+
+  observer.disconnect(body, config);
+
   window.addEventListener("resize", handleOverlayWindowResizeScroll);
   window.addEventListener("resize", handlePopoverWindowResizeScroll);
   window.addEventListener("scroll", handleOverlayWindowResizeScroll);
@@ -107,10 +110,9 @@ function applyToast(indexToast) {
 }
 
 function applyToastAdminPreview() {
-  console.log("message", messageFromPreview);
   const { target_element_id, message_title, message_body, image_url, background_opacity } =
     messageFromPreview;
-  targetElement = document.querySelector(`#${target_element_id}`);
+  targetElement = document.getElementById(`${target_element_id}`);
 
   if (!target_element_id || !targetElement) {
     console.log(
@@ -121,8 +123,8 @@ function applyToastAdminPreview() {
 
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
   const yTargetInLayout = Math.ceil(t.yTarget) - WHITE_SPACE;
-  const overlay = document.querySelector("#welcomeToastOverlay");
-  const popover = document.querySelector("#welcomeToastPopover");
+  const overlay = document.getElementById("welcomeToastOverlay");
+  const popover = document.getElementById("welcomeToastPopover");
 
   if (!overlay) {
     createOverlay();
@@ -149,6 +151,79 @@ function applyToastAdminPreview() {
   window.addEventListener("scroll", handleOverlayWindowResizeScroll);
   window.addEventListener("scroll", handlePopoverWindowResizeScroll);
   window.addEventListener("click", handleRemoveToast);
+}
+
+async function getProject() {
+  try {
+    const origin = window.location.origin;
+    client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
+
+    if (origin && origin !== "") {
+      setToastStyle();
+
+      const { data: resultProject, error } = await client
+        .from("project")
+        .select("*")
+        .like("link", `%${origin}%`);
+
+      if (resultProject.length === 0) {
+        throw new Error(error);
+      }
+
+      getToastList(resultProject[0].id);
+    }
+  } catch (e) {
+    console.log(
+      "등록되지 않은 URL입니다. @welcome-toast 관리자 페이지에서 프로젝트 설정을 확인해주세요.",
+    );
+    console.error(e);
+  }
+  return;
+}
+
+async function getToastList(projectId) {
+  try {
+    if (projectId) {
+      const { data: resultToastList, error } = await client
+        .from("toast")
+        .select("*")
+        .eq("project_id", projectId);
+
+      if (resultToastList.length === 0) {
+        throw new Error(error);
+      }
+
+      totalToastList.push(...resultToastList);
+
+      if (getCurrentToastList().length > 0) {
+        applyToast(FIRST_TOAST_INDEX);
+      }
+    }
+  } catch (e) {
+    console.log(
+      "등록된 토스트가 없습니다. @welcome-toast 관리자 페이지에서 토스트 설정을 확인해주세요.",
+    );
+    console.error(e);
+  }
+  return;
+}
+
+function getCurrentToastList() {
+  function getToastCurrentDocument(toast) {
+    const target = document.getElementById(`${toast.target_element_id}`);
+    if (target) {
+      return toast;
+    }
+  }
+
+  currentToastList = totalToastList.filter(getToastCurrentDocument);
+
+  return currentToastList;
+}
+
+function getFirstToast() {
+  prevFirstToast = currentToastList[FIRST_TOAST_INDEX];
+  return;
 }
 
 function getWindowAndTargetSizePosition(targetElement) {
@@ -184,7 +259,7 @@ function setOverlay(
   yTarget,
   background_opacity,
 ) {
-  const overlay = document.querySelector("#welcomeToastOverlay");
+  const overlay = document.getElementById("welcomeToastOverlay");
   overlay.innerHTML = `
       <svg
         viewBox="0 0 ${widthViewport} ${heightViewport}"
@@ -205,7 +280,7 @@ function setOverlay(
 }
 
 function createPopover() {
-  const overlay = document.querySelector("#welcomeToastOverlay");
+  const overlay = document.getElementById("welcomeToastOverlay");
 
   const popover = window.document.createElement("div");
   const popoverImage = window.document.createElement("div");
@@ -228,23 +303,21 @@ function createPopover() {
 }
 
 function setPopover(targetElement, message_title, message_body, image_url) {
-  console.log("@", targetElement, "@", message_title, "@", message_body, "@", image_url);
-  const popover = document.querySelector("#welcomeToastPopover");
-  const popoverImage = document.querySelector("#welcomeToastPopoverImage");
-  const popoverHeader = document.querySelector("#welcomeToastPopoverHeader");
-  const popoverDescription = document.querySelector("#welcomeToastPopoverDescription");
-  const popoverFooter = document.querySelector("#welcomeToastPopoverFooter");
+  const popover = document.getElementById("welcomeToastPopover");
+  const popoverImage = document.getElementById("welcomeToastPopoverImage");
+  const popoverHeader = document.getElementById("welcomeToastPopoverHeader");
+  const popoverDescription = document.getElementById("welcomeToastPopoverDescription");
+  const popoverFooter = document.getElementById("welcomeToastPopoverFooter");
 
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
   const gapRight = w.widthViewport - (t.right + t.widthTarget);
   const xTargetInLayout = t.xTarget + t.widthTarget + WHITE_SPACE;
 
-  popoverImage.innerHTML = "";
   popoverHeader.innerHTML = `<span style="font-weight: bold;">${message_title}</span>`;
   popoverDescription.innerHTML = `<span>${message_body}</span>`;
   popoverFooter.innerHTML = `<div style="width: 60%"></div><button id="welcomeToastPopoverButton" type="button">확인</button>`;
 
-  if (image_url !== "") {
+  if (image_url) {
     popoverImage.innerHTML = `<img src=${image_url} alt="popoverFooter" width="100%" />`;
   }
 
@@ -258,32 +331,63 @@ function setPopover(targetElement, message_title, message_body, image_url) {
     return;
   }
 
-  popover.style = `position: absolute; top: ${t.yTarget}px; left: ${xTargetInLayout}px; flex: auto; flex-direction: column; max-height: 250px; min-width: 200px; max-width: 250px; padding: 15px; border: 1px; margin: 5px; border-radius: 5%; background: #242424; color: white; box-shadow: 0 1px 10px #0006; z-index: 1000000; overflow: clip; overflow-wrap: break-word; word-break: break-all;`;
+  popover.style = `position: absolute; top: ${t.yTarget}px; left: ${xTargetInLayout}px; flex: auto; flex-direction: column; max-height: 250px; min-width: 200px; max-width: 250px; padding: 15px; font-family: Arial !important; border: 1px !important; margin: 5px; border-radius: 5% !important; background: #242424 !important; color: white !important; box-shadow: 0 1px 10px #0006 !important; z-index: 1000000; overflow: clip !important; overflow-wrap: break-word !important; word-break: break-all !important;`;
   popoverHeader.style = "margin-bottom: 10px;";
   popoverDescription.style = "margin-bottom: 10px;";
-  popoverFooter.style = "display: flex; align-items: center; justify-content: space-between;";
+  popoverFooter.style =
+    "display: flex; align-items: end !important; justify-content: space-between;";
+  welcomeToastPopoverButton.style =
+    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; font-size: 1em !important; font-weight: 500 !important; background-color: #1a1a1a !important; cursor: pointer !important; transition: border-color 0.25s !important;";
+  return;
+}
+
+function setToastStyle() {
+  const stylesheet = document.createElement("style");
+  const style =
+    "#welcomeToastPopoverButton:hover { border-color: #646cff !important; } #welcomeToastPopoverButton:focus, #welcomeToastPopoverButton:focus-visible { outline: 4px auto -webkit-focus-ring-color !important; }";
+
+  stylesheet.appendChild(document.createTextNode(style));
+  stylesheet.type = "text/css";
+
+  const head = document.head || document.getElementsByTagName("head")[0];
+  head.appendChild(stylesheet);
+
+  return;
+}
+
+function getToastHistory() {
+  const toastIdListViewed = JSON.parse(localStorage.getItem("welcome-toast-viewed"));
+  return toastIdListViewed;
+}
+
+function setToastHistory(firstToastId) {
+  const toastHistoryUpdate =
+    getToastHistory() === null ? [firstToastId] : [...getToastHistory(), firstToastId];
+  localStorage.setItem("welcome-toast-viewed", JSON.stringify(toastHistoryUpdate));
   return;
 }
 
 function handleToastButtonClick() {
-  const overlay = document.querySelector("#welcomeToastOverlay");
-  const popover = document.querySelector("#welcomeToastPopover");
+  const overlay = document.getElementById("welcomeToastOverlay");
+  const popover = document.getElementById("welcomeToastPopover");
+
+  indexToast += 1;
 
   overlay.remove();
   popover.remove();
 
-  if (countToastClicked === toastList.length - 1) {
+  if (indexToast === currentToastList.length) {
+    observer.observe(body, config);
     return;
   }
 
-  countToastClicked += 1;
-  applyToast(countToastClicked);
+  applyToast(indexToast);
   return;
 }
 
 function handleOverlayWindowResizeScroll() {
-  const { target_element_id, background_opacity } = toastList[0];
-  const targetElement = document.querySelector(`#${target_element_id}`);
+  const { target_element_id, background_opacity } = currentToastList[indexToast];
+  const targetElement = document.getElementById(`${target_element_id}`);
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
   const yTargetInLayout = Math.ceil(t.yTarget) - WHITE_SPACE;
 
@@ -300,9 +404,9 @@ function handleOverlayWindowResizeScroll() {
 }
 
 function handlePopoverWindowResizeScroll() {
-  const { target_element_id } = toastList[0];
-  const targetElement = document.querySelector(`#${target_element_id}`);
-  const popover = document.querySelector("#welcomeToastPopover");
+  const { target_element_id } = currentToastList[indexToast];
+  const targetElement = document.getElementById(`${target_element_id}`);
+  const popover = document.getElementById("welcomeToastPopover");
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
   const gapRight = w.widthViewport - (t.right + t.widthTarget);
 
@@ -324,12 +428,13 @@ function handlePopoverWindowResizeScroll() {
 }
 
 function handleRemoveToast(event) {
-  const overlay = document.querySelector("#welcomeToastOverlay");
-  const popover = document.querySelector("#welcomeToastPopover");
+  const overlay = document.getElementById("welcomeToastOverlay");
+  const popover = document.getElementById("welcomeToastPopover");
 
   if (event.target.tagName === "path") {
     overlay.remove();
     popover.remove();
+    observer.observe(body, config);
   }
   return;
 }

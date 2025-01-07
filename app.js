@@ -54,22 +54,22 @@ button9.addEventListener("click", function() {
     render(button9);
 }, { once: true });
 // 게임 다시 시작(새로고침)
-restartBtn.addEventListener("click", restart)   
+restartBtn.addEventListener("click", restart)
 
 // 기능1. 클릭액션
 function action(k) {
     let arrK = k.split(',').map(Number);
-    
+
     if (num % 2 === 0) {
         arrTom.push(arrK);
     } else {
         arrJerry.push(arrK);
     }
-    
+
     if (num >= 4) {
         winner(num);
     };
-    
+
     num = num + 1;
 };
 
