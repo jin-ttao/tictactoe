@@ -337,7 +337,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   popoverFooter.style =
     "display: flex; align-items: end !important; justify-content: space-between;";
   welcomeToastPopoverButton.style =
-    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; font-size: 1em !important; font-weight: 500 !important; background-color: #1a1a1a !important; cursor: pointer !important; transition: border-color 0.25s !important;";
+    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: white !important; font-size: 1em !important; font-weight: 500 !important; background-color: #1a1a1a !important; cursor: pointer !important; transition: border-color 0.25s !important;";
   return;
 }
 
