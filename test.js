@@ -15,7 +15,8 @@ const SUPABASE_API_KEY =
 const WHITE_SPACE = 5;
 const FIRST_TOAST_INDEX = 0;
 let indexToast = FIRST_TOAST_INDEX;
-
+const ancestorOrigin = window.location.ancestorOrigins;
+console.log("@@ ancestorOrigin", ancestorOrigin, typeof ancestorOrigin);
 const totalToastList = [];
 let currentToastList = [];
 let prevFirstToast;
@@ -27,6 +28,11 @@ let client;
 
 const observer = new MutationObserver(mutationCallback);
 function mutationCallback() {
+  if (ancestorOrigin.includes(TARGET_ORIGIN)) {
+    console.log("mutationCallback return - ancestorOrigin");
+    return;
+  }
+
   const currentToastIdList = getCurrentToastList().map((toast) => toast.id);
   console.log("mutationCallback");
 
@@ -57,6 +63,10 @@ const config = {
 
 function applyToast() {
   console.log("@@ applyToast 호출");
+  if (ancestorOrigin.includes(TARGET_ORIGIN)) {
+    console.log("applyToast return - ancestorOrigin");
+    return;
+  }
   getFirstToast();
 
   const {
@@ -381,6 +391,11 @@ function handleToastButtonClick() {
   overlay.remove();
   popover.remove();
 
+  if (ancestorOrigin.includes(TARGET_ORIGIN)) {
+    console.log("handleToastButtonClick return - ancestorOrigin");
+    return;
+  }
+
   indexToast += 1;
   if (indexToast === currentToastList.length) {
     console.log("handleToastButtonClick", indexToast);
@@ -441,7 +456,12 @@ function handleRemoveToast(event) {
   if (event.target.tagName === "path") {
     overlay.remove();
     popover.remove();
+
     console.log("handleRemoveToast");
+    if (ancestorOrigin.includes(TARGET_ORIGIN)) {
+      console.log("handleRemoveToast return - ancestorOrigin");
+      return;
+    }
     observer.observe(body, config);
   }
   return;
