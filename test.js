@@ -331,7 +331,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   const xTargetInLayout = t.xTarget + t.widthTarget + WHITE_SPACE;
 
   popoverImage.innerHTML = null;
-  popoverHeader.innerHTML = `<span style="font-weight: bold !important; font-size: 1.2rem !important;">${message_title}</span>`;
+  popoverHeader.innerHTML = `<span style="font-weight: bold !important; font-size: 1.3rem !important;">${message_title}</span>`;
   popoverDescription.innerHTML = `<span style="font-weight: normal !important; font-size: 1rem !important;">${message_body}</span>`;
   popoverFooter.innerHTML = `<div style="width: 60%"></div><button id="welcomeToastPopoverButton" type="button" style="font-weight: bold !important;">확인</button>`;
 
@@ -347,7 +347,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
     popoverDescription.style = "margin-bottom: 10px;";
     popoverFooter.style = "display: flex; align-items: center; justify-content: space-between;";
     welcomeToastPopoverButton.style =
-    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: #3D54E1 !important; font-size: 1em !important; font-weight: 500 !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important;";
+    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: #3D54E1 !important; font-size: 1em !important; font-weight: bold !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important;";
     return;
   }
 
@@ -357,7 +357,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   popoverFooter.style =
     "display: flex; align-items: end !important; justify-content: space-between;";
   welcomeToastPopoverButton.style =
-    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: #3D54E1 !important; font-size: 1em !important; font-weight: 500 !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important;";
+    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: #3D54E1 !important; font-size: 1em !important; font-weight: bold !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important;";
   return;
 }
 
