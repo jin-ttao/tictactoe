@@ -15,8 +15,8 @@ const SUPABASE_API_KEY =
 const WHITE_SPACE = 5;
 const FIRST_TOAST_INDEX = 0;
 let indexToast = FIRST_TOAST_INDEX;
-const ancestorOrigin = window.location.ancestorOrigins;
-console.log("@@ ancestorOrigin", ancestorOrigin, typeof ancestorOrigin);
+const ancestorOrigins = window.location.ancestorOrigins;
+console.log("@@ ancestorOrigins", ancestorOrigins, typeof ancestorOrigins);
 const totalToastList = [];
 let currentToastList = [];
 let prevFirstToast;
@@ -28,8 +28,8 @@ let client;
 
 const observer = new MutationObserver(mutationCallback);
 function mutationCallback() {
-  if (ancestorOrigin.includes(TARGET_ORIGIN)) {
-    console.log("mutationCallback return - ancestorOrigin");
+  if (ancestorOrigins.contains(TARGET_ORIGIN)) {
+    console.log("mutationCallback return - ancestorOrigins");
     return;
   }
 
@@ -63,8 +63,8 @@ const config = {
 
 function applyToast() {
   console.log("@@ applyToast 호출");
-  if (ancestorOrigin.includes(TARGET_ORIGIN)) {
-    console.log("applyToast return - ancestorOrigin");
+  if (ancestorOrigins.contains(TARGET_ORIGIN)) {
+    console.log("applyToast return - ancestorOrigins");
     return;
   }
   getFirstToast();
@@ -391,8 +391,8 @@ function handleToastButtonClick() {
   overlay.remove();
   popover.remove();
 
-  if (ancestorOrigin.includes(TARGET_ORIGIN)) {
-    console.log("handleToastButtonClick return - ancestorOrigin");
+  if (ancestorOrigins.contains(TARGET_ORIGIN)) {
+    console.log("handleToastButtonClick return - ancestorOrigins");
     return;
   }
 
@@ -458,8 +458,8 @@ function handleRemoveToast(event) {
     popover.remove();
 
     console.log("handleRemoveToast");
-    if (ancestorOrigin.includes(TARGET_ORIGIN)) {
-      console.log("handleRemoveToast return - ancestorOrigin");
+    if (ancestorOrigins.contains(TARGET_ORIGIN)) {
+      console.log("handleRemoveToast return - ancestorOrigins");
       return;
     }
     observer.observe(body, config);
