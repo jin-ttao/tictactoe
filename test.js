@@ -1,4 +1,6 @@
 console.log("@welcome-toast");
+console.log("@@ window parent location", window.parent);
+console.log("@@ window location", window.location);
 
 const s = document.createElement("script");
 s.type = "text/javascript";
@@ -26,16 +28,19 @@ let client;
 const observer = new MutationObserver(mutationCallback);
 function mutationCallback() {
   const currentToastIdList = getCurrentToastList().map((toast) => toast.id);
+  console.log("mutationCallback");
 
-  if (lastToast.id === currentToastIdList[currentToastIdList.length - 1]) {
+  if (lastToast === undefined || lastToast.id === currentToastIdList[currentToastIdList.length - 1]) {
+    console.log("mutationCallback_lastToast", lastToast);
     return;
   }
-
+  console.log("mutationCallback_lastToast", prevFirstToast, "currentToastList", currentToastList);
   if (prevFirstToast.id !== currentToastList[FIRST_TOAST_INDEX].id) {
     indexToast = FIRST_TOAST_INDEX;
   }
 
   if (currentToastIdList.length > 0) {
+    console.log("mutationCallback_applyToast_indexToast", indexToast);
     applyToast(indexToast);
   }
 
@@ -51,6 +56,7 @@ const config = {
 };
 
 function applyToast() {
+  console.log("@@ applyToast 호출");
   getFirstToast();
 
   const {
@@ -112,6 +118,7 @@ function applyToast() {
 function applyToastAdminPreview() {
   const { target_element_id, message_title, message_body, image_url, background_opacity } =
     messageFromPreview;
+  console.log("@@ message from preview", messageFromPreview);
   targetElement = document.getElementById(`${target_element_id}`);
 
   if (!target_element_id || !targetElement) {
@@ -371,12 +378,12 @@ function handleToastButtonClick() {
   const overlay = document.getElementById("welcomeToastOverlay");
   const popover = document.getElementById("welcomeToastPopover");
 
-  indexToast += 1;
-
   overlay.remove();
   popover.remove();
 
+  indexToast += 1;
   if (indexToast === currentToastList.length) {
+    console.log("handleToastButtonClick", indexToast);
     observer.observe(body, config);
     return;
   }
@@ -434,6 +441,7 @@ function handleRemoveToast(event) {
   if (event.target.tagName === "path") {
     overlay.remove();
     popover.remove();
+    console.log("handleRemoveToast");
     observer.observe(body, config);
   }
   return;
