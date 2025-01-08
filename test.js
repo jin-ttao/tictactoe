@@ -332,7 +332,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
 
   popoverImage.innerHTML = null;
   popoverHeader.innerHTML = `<span style="font-weight: bold !important; font: 1.2rem !important;">${message_title}</span>`;
-  popoverDescription.innerHTML = `<span style="font-weight: normal !important; font: 1rem !important;>${message_body}</span>`;
+  popoverDescription.innerHTML = `<span style="font-weight: normal !important; font: 1rem !important;">${message_body}</span>`;
   popoverFooter.innerHTML = `<div style="width: 60%"></div><button id="welcomeToastPopoverButton" type="button">확인</button>`;
 
   if (image_url !== "") {
@@ -411,7 +411,7 @@ function handleToastButtonClick() {
 }
 
 function handleOverlayWindowResizeScroll() {
-  const { target_element_id, background_opacity } = currentToastList[indexToast];
+  const { target_element_id, background_opacity } = ancestorOrigins.contains(TARGET_ORIGIN) ? messageFromPreview : currentToastList[indexToast];
   const targetElement = document.getElementById(`${target_element_id}`);
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
   const yTargetInLayout = Math.ceil(t.yTarget) - WHITE_SPACE;
@@ -429,7 +429,7 @@ function handleOverlayWindowResizeScroll() {
 }
 
 function handlePopoverWindowResizeScroll() {
-  const { target_element_id } = currentToastList[indexToast];
+  const { target_element_id } = ancestorOrigins.contains(TARGET_ORIGIN) ? messageFromPreview : currentToastList[indexToast];
   const targetElement = document.getElementById(`${target_element_id}`);
   const popover = document.getElementById("welcomeToastPopover");
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
