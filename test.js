@@ -6,7 +6,7 @@ s.defer = true;
 s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 document.head.appendChild(s);
 
-const TARGET_ORIGIN = "http://localhost:5173";
+const TARGET_ORIGIN = "https://welcome-toast.com";
 const SUPABASE_URL = "https://mepmumyanfvgmvjfjpld.supabase.co";
 const SUPABASE_API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcG11bXlhbmZ2Z212amZqcGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM1Nzg2MDUsImV4cCI6MjA0OTE1NDYwNX0.HojnVr-YfuBy25jf9qy5DKYkqvdowZ0Pz2FScfIN-04";
@@ -50,7 +50,7 @@ function mutationCallback() {
 
   return;
 }
-let body = document.body;
+const body = document.body;
 const config = {
   childList: true,
   subtree: true,
@@ -124,6 +124,11 @@ function applyToast() {
 function applyToastAdminPreview() {
   const { target_element_id, message_title, message_body, image_url, background_opacity } =
     messageFromPreview;
+
+  if (message_title.length === 0 && message_body.length === 0) {
+    return;
+  }
+
   targetElement = document.getElementById(`${target_element_id}`);
 
   if (!target_element_id || !targetElement) {
@@ -167,12 +172,12 @@ function applyToastAdminPreview() {
 
 async function getProject() {
   try {
-    body = document.body;
     const origin = window.location.origin;
     client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
     if (origin && origin !== "") {
       setToastStyle();
+      handleLoadDoneMessageParent();
 
       const { data: resultProject, error } = await client
         .from("project")
@@ -335,10 +340,11 @@ function setPopover(targetElement, message_title, message_body, image_url) {
     popoverImage.innerHTML = `<img src=${image_url} alt="popoverFooter" width="100%" style="margin-bottom: 10px;" />`;
   }
 
+  const welcomeToastPopoverButton = document.getElementById("welcomeToastPopoverButton");
   welcomeToastPopoverButton.addEventListener("click", handleToastButtonClick);
 
   if (gapRight < 300) {
-    popover.style = `position: absolute; top: ${t.yTarget + t.heightTarget + WHITE_SPACE + window.scrollY}px; right: ${w.widthViewport - t.xTarget - t.widthTarget - WHITE_SPACE}px; flex: auto; flex-direction: column; max-height: 250px; min-width: 200px; max-width: 250px; padding: 15px; border: 1px; margin: 5px; border-radius: 5%; background: #3D54E1 !important; color: white !important; box-shadow: 0 1px 10px #0006; z-index: 1000000; overflow: clip; overflow-wrap: break-word; word-break: break-all;`;
+    popover.style = `position: absolute; top: ${t.yTarget + t.heightTarget + WHITE_SPACE + window.scrollY}px; right: ${w.widthViewport - t.xTarget - t.widthTarget - WHITE_SPACE}px; flex: auto; flex-direction: column; max-height: 250px; min-width: 250px !important; max-width: 250px !important; padding: 15px; border: 1px; margin: 5px; border-radius: 5%; background: #3D54E1 !important; color: white !important; box-shadow: 0 1px 10px #0006; z-index: 1000000; overflow: clip; overflow-wrap: break-word; word-break: break-all;`;
     popoverHeader.style = "margin-bottom: 10px;";
     popoverDescription.style = "margin-bottom: 10px;";
     popoverFooter.style = "display: flex; align-items: center; justify-content: space-between;";
@@ -347,7 +353,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
     return;
   }
 
-  popover.style = `position: absolute; top: ${t.yTarget}px; left: ${xTargetInLayout}px; flex: auto; flex-direction: column; max-height: 250px; min-width: 200px; max-width: 250px; padding: 15px; font-family: Arial !important; border: 1px !important; margin: 5px; border-radius: 5% !important; background: #3D54E1 !important; color: white !important; box-shadow: 0 1px 10px #0006 !important; z-index: 1000000; overflow: clip !important; overflow-wrap: break-word !important; word-break: break-all !important;`;
+  popover.style = `position: absolute; top: ${t.yTarget}px; left: ${xTargetInLayout}px; flex: auto; flex-direction: column; max-height: 250px; min-width: 250px !important; max-width: 250px !important; padding: 15px; font-family: Arial !important; border: 1px !important; margin: 5px; border-radius: 5% !important; background: #3D54E1 !important; color: white !important; box-shadow: 0 1px 10px #0006 !important; z-index: 1000000; overflow: clip !important; overflow-wrap: break-word !important; word-break: break-all !important;`;
   popoverHeader.style = "margin-bottom: 10px;";
   popoverDescription.style = "margin-bottom: 10px;";
   popoverFooter.style =
@@ -467,9 +473,14 @@ function handleRemoveToast(event) {
 }
 
 function handleMessageParent(event) {
-  console.log("parent message", event, "@ Id", event.target.id);
   const target = JSON.parse(JSON.stringify(event.target.id));
   window.parent.postMessage({ target }, TARGET_ORIGIN);
+  return;
+}
+
+function handleLoadDoneMessageParent() {
+  const MESSAGE = "Preview loaded successfully.";
+  window.parent.postMessage({ MESSAGE }, TARGET_ORIGIN);
   return;
 }
 
@@ -477,7 +488,6 @@ window.addEventListener("load", getProject);
 window.addEventListener("message", (event) => {
   if (event.origin === TARGET_ORIGIN) {
     messageFromPreview = event.data;
-    console.log("child message", messageFromPreview);
     applyToastAdminPreview();
   }
   return;
