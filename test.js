@@ -1,6 +1,4 @@
 console.log("@welcome-toast");
-console.log("@@ window parent location", window.parent);
-console.log("@@ window location", window.location);
 
 const s = document.createElement("script");
 s.type = "text/javascript";
@@ -12,11 +10,11 @@ const TARGET_ORIGIN = "http://localhost:5173";
 const SUPABASE_URL = "https://mepmumyanfvgmvjfjpld.supabase.co";
 const SUPABASE_API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcG11bXlhbmZ2Z212amZqcGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM1Nzg2MDUsImV4cCI6MjA0OTE1NDYwNX0.HojnVr-YfuBy25jf9qy5DKYkqvdowZ0Pz2FScfIN-04";
+let client;
+
 const WHITE_SPACE = 5;
 const FIRST_TOAST_INDEX = 0;
 let indexToast = FIRST_TOAST_INDEX;
-const ancestorOrigins = window.location.ancestorOrigins;
-console.log("@@ ancestorOrigins", ancestorOrigins, typeof ancestorOrigins);
 const totalToastList = [];
 let currentToastList = [];
 let prevFirstToast;
@@ -24,35 +22,35 @@ let lastToast;
 let overlay = null;
 let targetElement = null;
 let messageFromPreview = "";
-let client;
+
+const ancestorOrigins = window.location.ancestorOrigins;
 
 const observer = new MutationObserver(mutationCallback);
 function mutationCallback() {
   if (ancestorOrigins.contains(TARGET_ORIGIN)) {
-    console.log("mutationCallback return - ancestorOrigins");
     return;
   }
 
   const currentToastIdList = getCurrentToastList().map((toast) => toast.id);
-  console.log("mutationCallback");
 
-  if (lastToast === undefined || lastToast.id === currentToastIdList[currentToastIdList.length - 1]) {
-    console.log("mutationCallback_lastToast", lastToast);
+  if (
+    lastToast === undefined ||
+    lastToast.id === currentToastIdList[currentToastIdList.length - 1]
+  ) {
     return;
   }
-  console.log("mutationCallback_lastToast", prevFirstToast, "currentToastList", currentToastList);
+
   if (prevFirstToast.id !== currentToastList[FIRST_TOAST_INDEX].id) {
     indexToast = FIRST_TOAST_INDEX;
   }
 
   if (currentToastIdList.length > 0) {
-    console.log("mutationCallback_applyToast_indexToast", indexToast);
     applyToast(indexToast);
   }
 
   return;
 }
-const body = document.body;
+let body = document.body;
 const config = {
   childList: true,
   subtree: true,
@@ -62,9 +60,7 @@ const config = {
 };
 
 function applyToast() {
-  console.log("@@ applyToast 호출");
   if (ancestorOrigins.contains(TARGET_ORIGIN)) {
-    console.log("applyToast return - ancestorOrigins");
     return;
   }
   getFirstToast();
@@ -128,7 +124,6 @@ function applyToast() {
 function applyToastAdminPreview() {
   const { target_element_id, message_title, message_body, image_url, background_opacity } =
     messageFromPreview;
-  console.log("@@ message from preview", messageFromPreview);
   targetElement = document.getElementById(`${target_element_id}`);
 
   if (!target_element_id || !targetElement) {
@@ -172,6 +167,7 @@ function applyToastAdminPreview() {
 
 async function getProject() {
   try {
+    body = document.body;
     const origin = window.location.origin;
     client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
@@ -347,7 +343,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
     popoverDescription.style = "margin-bottom: 10px;";
     popoverFooter.style = "display: flex; align-items: center; justify-content: space-between;";
     welcomeToastPopoverButton.style =
-    "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: #3D54E1 !important; font-size: 1em !important; font-weight: bold !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important;";
+      "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: #3D54E1 !important; font-size: 1em !important; font-weight: bold !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important;";
     return;
   }
 
@@ -395,13 +391,11 @@ function handleToastButtonClick() {
   popover.remove();
 
   if (ancestorOrigins.contains(TARGET_ORIGIN)) {
-    console.log("handleToastButtonClick return - ancestorOrigins");
     return;
   }
 
   indexToast += 1;
   if (indexToast === currentToastList.length) {
-    console.log("handleToastButtonClick", indexToast);
     observer.observe(body, config);
     return;
   }
@@ -411,7 +405,9 @@ function handleToastButtonClick() {
 }
 
 function handleOverlayWindowResizeScroll() {
-  const { target_element_id, background_opacity } = ancestorOrigins.contains(TARGET_ORIGIN) ? messageFromPreview : currentToastList[indexToast];
+  const { target_element_id, background_opacity } = ancestorOrigins.contains(TARGET_ORIGIN)
+    ? messageFromPreview
+    : currentToastList[indexToast];
   const targetElement = document.getElementById(`${target_element_id}`);
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
   const yTargetInLayout = Math.ceil(t.yTarget) - WHITE_SPACE;
@@ -429,7 +425,9 @@ function handleOverlayWindowResizeScroll() {
 }
 
 function handlePopoverWindowResizeScroll() {
-  const { target_element_id } = ancestorOrigins.contains(TARGET_ORIGIN) ? messageFromPreview : currentToastList[indexToast];
+  const { target_element_id } = ancestorOrigins.contains(TARGET_ORIGIN)
+    ? messageFromPreview
+    : currentToastList[indexToast];
   const targetElement = document.getElementById(`${target_element_id}`);
   const popover = document.getElementById("welcomeToastPopover");
   const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
@@ -460,9 +458,7 @@ function handleRemoveToast(event) {
     overlay.remove();
     popover.remove();
 
-    console.log("handleRemoveToast");
     if (ancestorOrigins.contains(TARGET_ORIGIN)) {
-      console.log("handleRemoveToast return - ancestorOrigins");
       return;
     }
     observer.observe(body, config);
@@ -471,6 +467,7 @@ function handleRemoveToast(event) {
 }
 
 function handleMessageParent(event) {
+  console.log("parent message", event, "@ Id", event.target.id);
   const target = JSON.parse(JSON.stringify(event.target.id));
   window.parent.postMessage({ target }, TARGET_ORIGIN);
   return;
@@ -480,6 +477,7 @@ window.addEventListener("load", getProject);
 window.addEventListener("message", (event) => {
   if (event.origin === TARGET_ORIGIN) {
     messageFromPreview = event.data;
+    console.log("child message", messageFromPreview);
     applyToastAdminPreview();
   }
   return;
