@@ -186,7 +186,7 @@ async function getProject() {
         .like("link", `%${origin}%`);
       console.log("resultProject", resultProject);
 
-      if (resultProject.length === 0) {
+      if (resultProject === null) {
         throw new Error(error);
       }
 
