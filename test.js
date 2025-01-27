@@ -169,11 +169,7 @@ function applyToastAdminPreview() {
 async function getProject() {
   try {
     const origin = window.location.origin;
-    client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY, {
-      global : {
-        headers : { "api_key" : "18e4556f-6f2f-4898-b0fd-5ff3b1f2c91a" },
-      }
-    });
+    client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
     console.log("client", client);
 
     if (origin && origin !== "") {
