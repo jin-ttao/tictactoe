@@ -6,7 +6,7 @@ s.defer = true;
 s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 document.head.appendChild(s);
 
-const TARGET_ORIGIN = "http://localhost:5173";
+const TARGET_ORIGIN = "https://welcome-toast.com";
 const SUPABASE_URL = "https://mepmumyanfvgmvjfjpld.supabase.co";
 const SUPABASE_API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcG11bXlhbmZ2Z212amZqcGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM1Nzg2MDUsImV4cCI6MjA0OTE1NDYwNX0.HojnVr-YfuBy25jf9qy5DKYkqvdowZ0Pz2FScfIN-04";
@@ -40,8 +40,10 @@ function mutationCallback() {
     return;
   }
 
-  if (prevFirstToast.id !== currentToastList[FIRST_TOAST_INDEX].id) {
-    indexToast = FIRST_TOAST_INDEX;
+  if (currentToastList.length > 0) {
+    if (currentToastList[FIRST_TOAST_INDEX].id !== prevFirstToast.id) {
+      indexToast = FIRST_TOAST_INDEX;
+    }
   }
 
   if (currentToastIdList.length > 0) {
@@ -50,7 +52,6 @@ function mutationCallback() {
 
   return;
 }
-const body = document.body;
 const config = {
   childList: true,
   subtree: true,
@@ -111,7 +112,7 @@ function applyToast() {
 
   lastToast = currentToastList[indexToast];
 
-  observer.disconnect(body, config);
+  observer.disconnect(document.body, config);
 
   window.addEventListener("resize", handleOverlayWindowResizeScroll);
   window.addEventListener("resize", handlePopoverWindowResizeScroll);
@@ -122,14 +123,8 @@ function applyToast() {
 }
 
 function applyToastAdminPreview() {
-  console.log("applyToastAdminPreview", messageFromPreview);
   const { target_element_id, message_title, message_body, image_url, background_opacity } =
     messageFromPreview;
-
-  if (message_title.length === 0 && message_body.length === 0) {
-    return;
-  }
-
   targetElement = document.getElementById(`${target_element_id}`);
 
   if (!target_element_id || !targetElement) {
@@ -206,7 +201,8 @@ async function getToastList(projectId) {
       const { data: resultToastList, error } = await client
         .from("toast")
         .select("*")
-        .eq("project_id", projectId);
+        .eq("project_id", projectId)
+        .order("id", { ascending: true });
 
       if (resultToastList.length === 0) {
         throw new Error(error);
@@ -230,8 +226,15 @@ async function getToastList(projectId) {
 function getCurrentToastList() {
   function getToastCurrentDocument(toast) {
     const target = document.getElementById(`${toast.target_element_id}`);
+
     if (target) {
-      return toast;
+      if (lastToast !== undefined) {
+        if (toast.id !== lastToast.id) {
+          return toast;
+        }
+      } else {
+        return toast;
+      }
     }
   }
 
@@ -403,7 +406,7 @@ function handleToastButtonClick() {
 
   indexToast += 1;
   if (indexToast === currentToastList.length) {
-    observer.observe(body, config);
+    observer.observe(document.body, config);
     return;
   }
 
@@ -468,7 +471,7 @@ function handleRemoveToast(event) {
     if (ancestorOrigins.contains(TARGET_ORIGIN)) {
       return;
     }
-    observer.observe(body, config);
+    observer.observe(document.body, config);
   }
   return;
 }
@@ -480,14 +483,14 @@ function handleMessageParent(event) {
 }
 
 function handleLoadDoneMessageParent() {
-  const MESSAGE = "Preview loaded successfully.";
-  window.parent.postMessage({ MESSAGE }, TARGET_ORIGIN);
+  const isPreviewLoaded = JSON.parse(JSON.stringify(true));
+  window.parent.postMessage({ isPreviewLoaded }, TARGET_ORIGIN);
   return;
 }
 
 window.addEventListener("load", getProject);
 window.addEventListener("message", (event) => {
-  if (event.origin === TARGET_ORIGIN) {
+  if (event.origin === TARGET_ORIGIN && ancestorOrigins.contains(TARGET_ORIGIN)) {
     messageFromPreview = event.data;
     applyToastAdminPreview();
   }
