@@ -6,7 +6,7 @@ s.defer = true;
 s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 document.head.appendChild(s);
 
-const TARGET_ORIGIN = "https://welcome-toast.com";
+const TARGET_ORIGIN = "http://localhost:5173";
 const SUPABASE_URL = "https://mepmumyanfvgmvjfjpld.supabase.co";
 const SUPABASE_API_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcG11bXlhbmZ2Z212amZqcGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM1Nzg2MDUsImV4cCI6MjA0OTE1NDYwNX0.HojnVr-YfuBy25jf9qy5DKYkqvdowZ0Pz2FScfIN-04";
@@ -34,7 +34,7 @@ window.welcometoast = {
 
       if (apiKey && apiKey !== "") {
         setToastStyle();
-        handleLoadDoneMessageParent();
+        handleLoadDoneMessageParent(apiKey);
 
         const { data: resultProject, error } = await client
           .from("project")
@@ -486,9 +486,9 @@ function handleMessageParent(event) {
   return;
 }
 
-function handleLoadDoneMessageParent() {
-  const isPreviewLoaded = true;
-  window.parent.postMessage({ isPreviewLoaded }, TARGET_ORIGIN);
+function handleLoadDoneMessageParent(apiKey) {
+  const previewInfo = { isPreviewLoaded: true, projectApiKey: apiKey };
+  window.parent.postMessage({ previewInfo }, TARGET_ORIGIN);
   return;
 }
 
