@@ -495,7 +495,7 @@ function handleLoadDoneMessageParent() {
 }
 
 function welcometoastInit () {
-  if (window.welcometoastConfig && typeof window.welcometoastConfig.onReady === 'function') {
+  if (window.welcometoastConfig && typeof window.welcometoastConfig.init === 'function') {
     window.welcometoastConfig.init();
   }
 }
