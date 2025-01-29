@@ -207,7 +207,8 @@ async function getToastList(projectId) {
         .select("*")
         .eq("project_id", projectId)
         .order("id", { ascending: true });
-
+      console.log("resultToastList", resultToastList);
+      console.log("ToastList", resultToastList[0].id, "vs", resultToastList[1].id);
       if (resultToastList.length === 0) {
         throw new Error(error);
       }
