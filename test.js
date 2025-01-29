@@ -165,7 +165,7 @@ function applyToastAdminPreview() {
   window.addEventListener("scroll", handlePopoverWindowResizeScroll);
   window.addEventListener("click", handleRemoveToast);
 }
-
+window.welcometoast = {};
 window.welcometoast.getProject = async function getProject(apiKey) {
   try {
     const origin = window.location.origin;
