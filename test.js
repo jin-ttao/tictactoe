@@ -169,6 +169,7 @@ window.welcometoast = {};
 window.welcometoast.getProject = async function getProject(apiKey) {
   try {
     const origin = window.location.origin;
+    console.log("supabase", supabase, "apiKey", apiKey);
     client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY, {
       global : {
         headers : { "api_key" : apiKey },
