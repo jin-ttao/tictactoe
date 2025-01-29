@@ -495,7 +495,14 @@ function handleLoadDoneMessageParent() {
   return;
 }
 
+function loadScript () {
+  if (window.welcometoastConfig && typeof window.welcometoastConfig.onReady === 'function') {
+    console.log("@ 3 onReady 실행", window.welcometoastConfig);
+    window.welcometoastConfig.onReady();
+  }
+}
 // window.addEventListener("load", getProject);
+window.addEventListener("load", loadScript);
 window.addEventListener("message", (event) => {
   if (event.origin === TARGET_ORIGIN && ancestorOrigins.contains(TARGET_ORIGIN)) {
     messageFromPreview = event.data;
