@@ -26,7 +26,11 @@ let messageFromPreview = "";
 window.welcometoast = {
   getProject : async function (apiKey) {
     try {
-      client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY);
+      client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY, {
+        global : {
+          headers : { "api_key" : apiKey },
+        }
+      });
 
       if (apiKey && apiKey !== "") {
         setToastStyle();
@@ -36,7 +40,7 @@ window.welcometoast = {
           .from("project")
           .select("*")
           .eq("api_key", apiKey);
-
+        console.log("resultProject", resultProject);
         if (resultProject === undefined) {
           throw new Error(error);
         }
@@ -477,13 +481,13 @@ function handleRemoveToast(event) {
 }
 
 function handleMessageParent(event) {
-  const target = JSON.parse(JSON.stringify(event.target.id));
+  const target = event.target.id;
   window.parent.postMessage({ target }, TARGET_ORIGIN);
   return;
 }
 
 function handleLoadDoneMessageParent() {
-  const isPreviewLoaded = JSON.parse(JSON.stringify(true));
+  const isPreviewLoaded = true;
   window.parent.postMessage({ isPreviewLoaded }, TARGET_ORIGIN);
   return;
 }
