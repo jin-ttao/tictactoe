@@ -166,12 +166,12 @@ function applyToastAdminPreview() {
   window.addEventListener("click", handleRemoveToast);
 }
 
-async function getProject() {
+window.welcometoast.getProject = async function getProject(apiKey) {
   try {
     const origin = window.location.origin;
     client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY, {
       global : {
-        headers : { "api_key" : "1" },
+        headers : { "api_key" : apiKey },
       }
     });
     console.log("client", client);
@@ -494,7 +494,7 @@ function handleLoadDoneMessageParent() {
   return;
 }
 
-window.addEventListener("load", getProject);
+// window.addEventListener("load", getProject);
 window.addEventListener("message", (event) => {
   if (event.origin === TARGET_ORIGIN && ancestorOrigins.contains(TARGET_ORIGIN)) {
     messageFromPreview = event.data;
