@@ -488,7 +488,7 @@ function handleMessageParent(event) {
 }
 
 function handleLoadDoneMessageParent(apiKey) {
-  const previewInfo = { isPreviewLoaded: true, projectApiKey: apiKey };
+  const previewInfo = { previewApiKey: apiKey, isPreviewLoadSuccedd: true };
   window.parent.postMessage({ previewInfo }, TARGET_ORIGIN);
   return;
 }
