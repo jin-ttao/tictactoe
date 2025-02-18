@@ -13,7 +13,26 @@ const SUPABASE_API_KEY =
 let client;
 
 const WHITE_SPACE = 5;
+const FULL_HEIGHT = "height: 100%";
+const FOOTER_WIDTH = "width: 60%";
+const MARGIN_BOTTOM = "margin-bottom: 0.625rem";
+const HEADER_FONT_SIZE = "font-size: 1.3rem !important";
+const DESCRIPTION_FONT_SIZE = "font-size: 1rem !important";
+const FONT_NORMAL = "font-weight: normal !important";
+const FONT_BOLD = "font-weight: bold !important";
+const BACKGROUND_MAIN_COLOR = "background: #242424 !important";
+const SHADOW_STYLE =
+  "box-shadow: 0 0.06rem 0.625rem !important; color: #363636 !important";
+const DISPLAY_FLEX_BETWEEN = "display: flex; justify-content: space-between";
+const BUTTON_BASIC_STYLE =
+  "padding: 0.6em 1.2em !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important; border-radius: 0.5rem !important";
+const BORDER_WIDTH = "border: 0.06rem solid transparent";
+const POPOVER_STYLE =
+  "max-height: 15.625rem !important; min-width: 15.625rem !important; max-width: 15.625rem !important; padding: 0.95rem; border: 0.06rem; margin: 0.3rem; font-family: Arial !important";
+const OVER_FLOW_CLIP =
+  "overflow: clip !important; overflow-wrap: break-word !important; word-break: break-all !important";
 const FIRST_TOAST_INDEX = 0;
+
 let indexToast = FIRST_TOAST_INDEX;
 const totalToastList = [];
 let currentToastList = [];
@@ -354,32 +373,13 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   const gapRight = w.widthViewport - (t.right + t.widthTarget);
   const xTargetInLayout = t.xTarget + t.widthTarget + WHITE_SPACE;
 
-  const FULL_WIDTH = "width: 100%";
-  const FOOTER_WIDTH = "width: 60%";
-  const MARGIN_BOTTOM = "margin-bottom: 0.625rem";
-  const HEADER_FONT_SIZE = "font-size: 1.3rem !important";
-  const DESCRIPTION_FONT_SIZE = "font-size: 1rem !important";
-  const FONT_NORMAL = "font-weight: normal !important";
-  const FONT_BOLD = "font-weight: bold !important";
-  const BACKGROUND_MAIN_COLOR = "background: #242424 !important";
-  const SHADOW_STYLE =
-    "box-shadow: 0 0.06rem 0.625rem !important; color: #363636 !important";
-  const DISPLAY_FLEX_BETWEEN = "display: flex; justify-content: space-between";
-  const BUTTON_BASIC_STYLE =
-    "padding: 0.6em 1.2em !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important; border-radius: 0.5rem !important";
-  const BORDER_WIDTH = "border: 0.06rem solid transparent";
-  const POPOVER_STYLE =
-    "max-height: 15.625rem !important; min-width: 15.625rem !important; max-width: 15.625rem !important; padding: 0.95rem; border: 0.06rem; margin: 0.3rem; font-family: Arial !important";
-  const OVER_FLOW_CLIP =
-    "overflow: clip !important; overflow-wrap: break-word !important; word-break: break-all !important";
-
   popoverImage.innerHTML = null;
   popoverHeader.innerHTML = `<span style=${FONT_BOLD}; ${HEADER_FONT_SIZE};">${message_title}</span>`;
   popoverDescription.innerHTML = `<span style=${FONT_NORMAL}; ${DESCRIPTION_FONT_SIZE};">${message_body}</span>`;
   popoverFooter.innerHTML = `<div style=${FOOTER_WIDTH};></div><button id="welcomeToastPopoverButton" type="button" style=${FONT_BOLD}>확인</button>`;
 
   if (image_url !== "") {
-    popoverImage.innerHTML = `<img src=${image_url} alt="popoverFooter" style=${FULL_WIDTH}; ${MARGIN_BOTTOM}; />`;
+    popoverImage.innerHTML = `<img src=${image_url} alt="popoverFooter" style=${FULL_HEIGHT}; ${MARGIN_BOTTOM}; />`;
   }
 
   const welcomeToastPopoverButton = document.getElementById(
