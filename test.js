@@ -13,7 +13,7 @@ const SUPABASE_API_KEY =
 let client;
 
 const WHITE_SPACE = 5;
-const FULL_HEIGHT = "height: 100%";
+const IMAGE_HEIGHT = "height: 10";
 const FOOTER_WIDTH = "width: 60%";
 const MARGIN_BOTTOM = "margin-bottom: 0.625rem";
 const HEADER_FONT_SIZE = "font-size: 1.3rem !important";
@@ -379,7 +379,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   popoverFooter.innerHTML = `<div style=${FOOTER_WIDTH};></div><button id="welcomeToastPopoverButton" type="button" style=${FONT_BOLD}>확인</button>`;
 
   if (image_url !== "") {
-    popoverImage.innerHTML = `<img src=${image_url} alt="popoverFooter" style=${FULL_HEIGHT}; ${MARGIN_BOTTOM}; />`;
+    popoverImage.innerHTML = `<img src=${image_url} alt="popoverImage" style=${IMAGE_HEIGHT}; ${MARGIN_BOTTOM}; />`;
   }
 
   const welcomeToastPopoverButton = document.getElementById(
