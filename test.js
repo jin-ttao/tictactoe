@@ -20,9 +20,9 @@ const HEADER_FONT_SIZE = "font-size: 1.3rem !important";
 const DESCRIPTION_FONT_SIZE = "font-size: 1rem !important";
 const FONT_NORMAL = "font-weight: normal !important";
 const FONT_BOLD = "font-weight: bold !important";
-const BACKGROUND_MAIN_COLOR = "background-color: #3D54E1 !important; color: white !important";
+const BACKGROUND_MAIN_COLOR = "background-color: white !important; color: black !important";
 const SHADOW_STYLE =
-  "box-shadow: 0 0.06rem 0.625rem !important; color: #363636 !important";
+  "box-shadow: 0 0.06rem 0.625rem !important; color: #1a1a1a !important";
 const DISPLAY_FLEX_BETWEEN = "display: flex; justify-content: space-between";
 const BUTTON_BASIC_STYLE =
   "padding: 0.6em 1.2em !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important; border-radius: 0.5rem !important";
@@ -374,12 +374,12 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   const xTargetInLayout = t.xTarget + t.widthTarget + WHITE_SPACE;
 
   popoverImage.innerHTML = null;
-  popoverHeader.innerHTML = `<span style=${FONT_BOLD}; ${HEADER_FONT_SIZE};">${message_title}</span>`;
-  popoverDescription.innerHTML = `<span style=${FONT_NORMAL}; ${DESCRIPTION_FONT_SIZE};">${message_body}</span>`;
-  popoverFooter.innerHTML = `<div style=${FOOTER_WIDTH};></div><button id="welcomeToastPopoverButton" type="button" style=${FONT_BOLD}>확인</button>`;
+  popoverHeader.innerHTML = `<span style="${FONT_BOLD}; ${HEADER_FONT_SIZE}">${message_title}</span>`;
+  popoverDescription.innerHTML = `<span style="${FONT_NORMAL}; ${DESCRIPTION_FONT_SIZE}">${message_body}</span>`;
+  popoverFooter.innerHTML = `<div style="${FOOTER_WIDTH}"></div><button id="welcomeToastPopoverButton" type="button" style="${FONT_BOLD}">확인</button>`;
 
   if (image_url !== "") {
-    popoverImage.innerHTML = `<img src=${image_url} alt="popoverImage" style=${IMAGE_HEIGHT}; ${MARGIN_BOTTOM}; />`;
+    popoverImage.innerHTML = `<img src="${image_url}" alt="popoverImage" style="${IMAGE_HEIGHT}; ${MARGIN_BOTTOM}" />`;
   }
 
   const welcomeToastPopoverButton = document.getElementById(
@@ -405,7 +405,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
 }
 
 function setToastStyle() {
-  const BORDER_COLOR = "border-color: #646cff !important";
+  const BORDER_COLOR = "border-color: #1a1a1a !important";
   const stylesheet = document.createElement("style");
   const style = `#welcomeToastPopoverButton:hover { ${BORDER_COLOR}; } #welcomeToastPopoverButton:focus, #welcomeToastPopoverButton:focus-visible { outline: 0.25rem auto -webkit-focus-ring-color !important; }`;
 
