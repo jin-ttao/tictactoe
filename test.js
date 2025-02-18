@@ -24,12 +24,12 @@ let targetElement = null;
 let messageFromPreview = "";
 
 window.welcometoast = {
-  getProject : async function (apiKey) {
+  getProject: async function (apiKey) {
     try {
       client = supabase.createClient(SUPABASE_URL, SUPABASE_API_KEY, {
-        global : {
-          headers : { "api_key" : apiKey },
-        }
+        global: {
+          headers: { api_key: apiKey },
+        },
       });
 
       if (apiKey && apiKey !== "") {
@@ -54,7 +54,7 @@ window.welcometoast = {
       console.error(e);
     }
     return;
-  }
+  },
 };
 
 const ancestorOrigins = window.location.ancestorOrigins;
@@ -121,12 +121,15 @@ function applyToast() {
 
   if (!target_element_id || !targetElement) {
     console.log(
-      !target_element_id ? "타겟 id가 없습니다." : "타겟 id을 가진 요소가 존재하지 않습니다.",
+      !target_element_id
+        ? "타겟 id가 없습니다."
+        : "타겟 id을 가진 요소가 존재하지 않습니다.",
     );
     return;
   }
 
-  const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
+  const { window: w, target: t } =
+    getWindowAndTargetSizePosition(targetElement);
   const yTargetInLayout = Math.ceil(t.yTarget) - WHITE_SPACE;
 
   createOverlay();
@@ -156,18 +159,26 @@ function applyToast() {
 }
 
 function applyToastAdminPreview() {
-  const { target_element_id, message_title, message_body, image_url, background_opacity } =
-    messageFromPreview;
+  const {
+    target_element_id,
+    message_title,
+    message_body,
+    image_url,
+    background_opacity,
+  } = messageFromPreview;
   targetElement = document.getElementById(`${target_element_id}`);
 
   if (!target_element_id || !targetElement) {
     console.log(
-      !target_element_id ? "타겟 id가 없습니다." : "타겟 id을 가진 요소가 존재하지 않습니다.",
+      !target_element_id
+        ? "타겟 id가 없습니다."
+        : "타겟 id을 가진 요소가 존재하지 않습니다.",
     );
     return;
   }
 
-  const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
+  const { window: w, target: t } =
+    getWindowAndTargetSizePosition(targetElement);
   const yTargetInLayout = Math.ceil(t.yTarget) - WHITE_SPACE;
   const overlay = document.getElementById("welcomeToastOverlay");
   const popover = document.getElementById("welcomeToastPopover");
@@ -207,8 +218,7 @@ async function getToastList(projectId) {
         .select("*")
         .eq("project_id", projectId)
         .order("id", { ascending: true });
-      console.log("resultToastList", resultToastList);
-      console.log("ToastList", resultToastList[0].id, "vs", resultToastList[1].id);
+
       if (resultToastList.length === 0) {
         throw new Error(error);
       }
@@ -254,7 +264,8 @@ function getFirstToast() {
 }
 
 function getWindowAndTargetSizePosition(targetElement) {
-  const { width: widthViewport, height: heightViewport } = window.visualViewport;
+  const { width: widthViewport, height: heightViewport } =
+    window.visualViewport;
   const {
     width: widthTarget,
     height: heightTarget,
@@ -333,10 +344,13 @@ function setPopover(targetElement, message_title, message_body, image_url) {
   const popover = document.getElementById("welcomeToastPopover");
   const popoverImage = document.getElementById("welcomeToastPopoverImage");
   const popoverHeader = document.getElementById("welcomeToastPopoverHeader");
-  const popoverDescription = document.getElementById("welcomeToastPopoverDescription");
+  const popoverDescription = document.getElementById(
+    "welcomeToastPopoverDescription",
+  );
   const popoverFooter = document.getElementById("welcomeToastPopoverFooter");
 
-  const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
+  const { window: w, target: t } =
+    getWindowAndTargetSizePosition(targetElement);
   const gapRight = w.widthViewport - (t.right + t.widthTarget);
   const xTargetInLayout = t.xTarget + t.widthTarget + WHITE_SPACE;
 
@@ -349,14 +363,17 @@ function setPopover(targetElement, message_title, message_body, image_url) {
     popoverImage.innerHTML = `<img src=${image_url} alt="popoverFooter" width="100%" style="margin-bottom: 10px;" />`;
   }
 
-  const welcomeToastPopoverButton = document.getElementById("welcomeToastPopoverButton");
+  const welcomeToastPopoverButton = document.getElementById(
+    "welcomeToastPopoverButton",
+  );
   welcomeToastPopoverButton.addEventListener("click", handleToastButtonClick);
 
   if (gapRight < 300) {
     popover.style = `position: absolute; top: ${t.yTarget + t.heightTarget + WHITE_SPACE + window.scrollY}px; right: ${w.widthViewport - t.xTarget - t.widthTarget - WHITE_SPACE}px; flex: auto; flex-direction: column; max-height: 250px; min-width: 250px !important; max-width: 250px !important; padding: 15px; border: 1px; margin: 5px; border-radius: 5%; background: #3D54E1 !important; color: white !important; box-shadow: 0 1px 10px #0006; z-index: 1000000; overflow: clip; overflow-wrap: break-word; word-break: break-all;`;
     popoverHeader.style = "margin-bottom: 10px;";
     popoverDescription.style = "margin-bottom: 10px;";
-    popoverFooter.style = "display: flex; align-items: center; justify-content: space-between;";
+    popoverFooter.style =
+      "display: flex; align-items: center; justify-content: space-between;";
     welcomeToastPopoverButton.style =
       "border-radius: 8px !important; border: 1px solid transparent; padding: 0.6em 1.2em !important; color: #3D54E1 !important; font-size: 1em !important; font-weight: bold !important; background-color: white !important; cursor: pointer !important; transition: border-color 0.25s !important;";
     return;
@@ -387,14 +404,21 @@ function setToastStyle() {
 }
 
 function getToastHistory() {
-  const toastIdListViewed = JSON.parse(localStorage.getItem("welcome-toast-viewed"));
+  const toastIdListViewed = JSON.parse(
+    localStorage.getItem("welcome-toast-viewed"),
+  );
   return toastIdListViewed;
 }
 
 function setToastHistory(firstToastId) {
   const toastHistoryUpdate =
-    getToastHistory() === null ? [firstToastId] : [...getToastHistory(), firstToastId];
-  localStorage.setItem("welcome-toast-viewed", JSON.stringify(toastHistoryUpdate));
+    getToastHistory() === null
+      ? [firstToastId]
+      : [...getToastHistory(), firstToastId];
+  localStorage.setItem(
+    "welcome-toast-viewed",
+    JSON.stringify(toastHistoryUpdate),
+  );
   return;
 }
 
@@ -420,11 +444,14 @@ function handleToastButtonClick() {
 }
 
 function handleOverlayWindowResizeScroll() {
-  const { target_element_id, background_opacity } = ancestorOrigins.contains(TARGET_ORIGIN)
+  const { target_element_id, background_opacity } = ancestorOrigins.contains(
+    TARGET_ORIGIN,
+  )
     ? messageFromPreview
     : currentToastList[indexToast];
   const targetElement = document.getElementById(`${target_element_id}`);
-  const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
+  const { window: w, target: t } =
+    getWindowAndTargetSizePosition(targetElement);
   const yTargetInLayout = Math.ceil(t.yTarget) - WHITE_SPACE;
 
   setOverlay(
@@ -445,7 +472,8 @@ function handlePopoverWindowResizeScroll() {
     : currentToastList[indexToast];
   const targetElement = document.getElementById(`${target_element_id}`);
   const popover = document.getElementById("welcomeToastPopover");
-  const { window: w, target: t } = getWindowAndTargetSizePosition(targetElement);
+  const { window: w, target: t } =
+    getWindowAndTargetSizePosition(targetElement);
   const gapRight = w.widthViewport - (t.right + t.widthTarget);
 
   if (!popover) {
@@ -493,15 +521,21 @@ function handleLoadDoneMessageParent(apiKey) {
   return;
 }
 
-function welcometoastInit () {
-  if (window.welcometoastConfig && typeof window.welcometoastConfig.init === 'function') {
+function welcometoastInit() {
+  if (
+    window.welcometoastConfig &&
+    typeof window.welcometoastConfig.init === "function"
+  ) {
     window.welcometoastConfig.init();
   }
 }
 
 window.addEventListener("load", welcometoastInit);
 window.addEventListener("message", (event) => {
-  if (event.origin === TARGET_ORIGIN && ancestorOrigins.contains(TARGET_ORIGIN)) {
+  if (
+    event.origin === TARGET_ORIGIN &&
+    ancestorOrigins.contains(TARGET_ORIGIN)
+  ) {
     messageFromPreview = event.data;
     applyToastAdminPreview();
   }
