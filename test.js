@@ -20,7 +20,7 @@ const HEADER_FONT_SIZE = "font-size: 1.3rem !important";
 const DESCRIPTION_FONT_SIZE = "font-size: 1rem !important";
 const FONT_NORMAL = "font-weight: normal !important";
 const FONT_BOLD = "font-weight: bold !important";
-const BACKGROUND_MAIN_COLOR = "background: #003aff !important";
+const BACKGROUND_MAIN_COLOR = "background: #3D54E1 !important";
 const SHADOW_STYLE =
   "box-shadow: 0 0.06rem 0.625rem !important; color: #363636 !important";
 const DISPLAY_FLEX_BETWEEN = "display: flex; justify-content: space-between";
@@ -405,7 +405,7 @@ function setPopover(targetElement, message_title, message_body, image_url) {
 }
 
 function setToastStyle() {
-  const BORDER_COLOR = "border-color: #242424 !important";
+  const BORDER_COLOR = "border-color: #646cff !important";
   const stylesheet = document.createElement("style");
   const style = `#welcomeToastPopoverButton:hover { ${BORDER_COLOR}; } #welcomeToastPopoverButton:focus, #welcomeToastPopoverButton:focus-visible { outline: 0.25rem auto -webkit-focus-ring-color !important; }`;
 
