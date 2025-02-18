@@ -20,7 +20,7 @@ const HEADER_FONT_SIZE = "font-size: 1.3rem !important";
 const DESCRIPTION_FONT_SIZE = "font-size: 1rem !important";
 const FONT_NORMAL = "font-weight: normal !important";
 const FONT_BOLD = "font-weight: bold !important";
-const BACKGROUND_MAIN_COLOR = "background: #3D54E1 !important";
+const BACKGROUND_MAIN_COLOR = "color: #3D54E1 !important; background-color: white !important";
 const SHADOW_STYLE =
   "box-shadow: 0 0.06rem 0.625rem !important; color: #363636 !important";
 const DISPLAY_FLEX_BETWEEN = "display: flex; justify-content: space-between";
